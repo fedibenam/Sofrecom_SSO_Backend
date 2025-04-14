@@ -1,4 +1,3 @@
-// JwtTokenProvider.java
 package org.example.security;
 
 import io.jsonwebtoken.Jwts;
@@ -24,9 +23,10 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(userDetailsImpl.getUsername())
                 .claim("name", userDetailsImpl.getFullName())
-                .claim("role", userDetailsImpl.getAuthorities().stream()
+                .claim("groups", userDetailsImpl.getAuthorities().stream()
                         .map(authority -> authority.getAuthority())
                         .collect(Collectors.toList())) // Store roles as JSON array
+                .claim("roles", userDetailsImpl.getRoleNames()) // Add roleNames as a claim
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

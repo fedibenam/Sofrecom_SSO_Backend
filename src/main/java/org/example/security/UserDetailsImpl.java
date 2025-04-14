@@ -1,6 +1,7 @@
 package org.example.security;
 
 import org.example.Entity.User;
+import org.example.models.UserInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +12,25 @@ import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
+    private final UserInfo userInfo;
+    private final List<String> roleNames;
+
+    public UserDetailsImpl(UserInfo userInfo, List<String> roleNames) {
+        this.userInfo = userInfo;
+        this.roleNames = roleNames;
+    }
 
     public UserDetailsImpl(User user) {
-        this.user = user;
+        this.userInfo = new UserInfo();
+        this.userInfo.setUsername(user.getUsername());
+        this.userInfo.setFullName(user.getFullName());
+        this.userInfo.setGroups(user.getGroups());
+        this.roleNames = null; // or set a default value
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getGroups().stream()
+        return userInfo.getGroups().stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
@@ -31,11 +42,16 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return userInfo.getUsername();
     }
 
+    public String getFullName() {
+        return userInfo.getFullName();
+    }
 
-    public String getFullName() {return user.getFullName();}
+    public List<String> getRoleNames() {
+        return roleNames;
+    }
 
     @Override
     public boolean isAccountNonExpired() {

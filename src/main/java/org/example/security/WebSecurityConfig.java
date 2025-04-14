@@ -16,6 +16,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/info").permitAll()
+                .antMatchers("/api/auth/send-token").permitAll() // Allow access to /api/auth/** without authentication
+                .antMatchers("/api/users/**").permitAll() // Allow access to /api/users/** without authentication
                 .anyRequest().authenticated();
     }
 }
