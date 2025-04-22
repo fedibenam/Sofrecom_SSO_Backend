@@ -42,7 +42,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/send-token")
     public ResponseEntity<Map<String, String>> sendTokenToDjango(@RequestBody UserInfo userInfo) {
         // Validate and process user information
         boolean isValid = userService.validateAndProcessUserInfo(userInfo);
@@ -52,14 +51,19 @@ public class UserController {
             logger.info("Generated JWT token: {}", jwtToken);
 
             // Prepare request to Django application
-            String djangoUrl = "http://127.0.0.1:8000/api/auth/validate-token"; // Replace with actual Django endpoint
+            String djangoUrl = "http://127.0.0.1:8000/sso-login/"; // Replace with actual Django endpoint
             RestTemplate restTemplate = new RestTemplate();
+            Map<String, String> tokenBody = new HashMap<>();
+            tokenBody.put("token", jwtToken);
+
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + jwtToken);
-            HttpEntity<String> request = new HttpEntity<>(null, headers);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<Map<String, String>> request = new HttpEntity<>(tokenBody, headers);
+            ResponseEntity<String> djangoResponse = restTemplate.postForEntity(djangoUrl, request, String.class);
+
 
             // Send token to Django and get response
-            ResponseEntity<String> djangoResponse = null;
             try {
                 djangoResponse = restTemplate.exchange(djangoUrl, HttpMethod.POST, request, String.class);
                 logger.info("Response from Django: {}", djangoResponse.getBody());
@@ -75,11 +79,17 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
             }
 
-            // Return response to frontend
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Token sent successfully");
-            response.put("djangoResponse", djangoResponse != null ? djangoResponse.getBody() : "No response from Django");
-            return ResponseEntity.ok(response);
+            // Check Django response to determine success
+            if (djangoResponse != null && djangoResponse.getStatusCode() == HttpStatus.OK) {
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "SSO token validated successfully");
+                response.put("djangoResponse", djangoResponse.getBody());
+                return ResponseEntity.ok(response);
+            } else {
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Invalid token or failed authentication");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
         } else {
             Map<String, String> response = new HashMap<>();
             response.put("message", "Invalid user information");

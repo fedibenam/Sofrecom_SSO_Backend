@@ -1,6 +1,6 @@
 package org.example.controllers;
 
-import org.example.Entity.MetabaseUserModel;
+import org.example.Entity.primary.MetabaseUserModel;
 import org.example.services.MetabaseUserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
-package org.example.Repository;
+package org.example.Repository.primary;
 
-import org.example.Entity.MetabaseUserModel;
+import org.example.Entity.primary.MetabaseUserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

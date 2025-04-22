@@ -1,7 +1,7 @@
 package org.example.services;
 
-import org.example.Entity.MetabaseUserModel;
-import org.example.Repository.MetabaseUserModelRepository;
+import org.example.Entity.primary.MetabaseUserModel;
+import org.example.Repository.primary.MetabaseUserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

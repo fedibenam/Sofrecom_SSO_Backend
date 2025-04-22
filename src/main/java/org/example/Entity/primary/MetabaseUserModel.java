@@ -1,4 +1,4 @@
-package org.example.Entity;
+package org.example.Entity.primary;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -56,8 +56,9 @@ public class MetabaseUserModel {
     @Column(name = "resp_bu")
     private String respBu;
 
-    @Column(name = "\"Mail\"")
+    @Column(name = "mail")
     private String mail;
+
 
 
     @Column(name = "nb_exp")

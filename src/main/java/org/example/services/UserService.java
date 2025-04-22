@@ -1,9 +1,9 @@
 package org.example.services;
 
-import org.example.Entity.User;
-import org.example.Repository.UserRepository;
+import org.example.Entity.primary.User;
+import org.example.Repository.primary.UserRepository;
 import org.example.models.UserInfo;
-import org.example.Repository.UserRoleCombinedRepository;
+import org.example.Repository.primary.UserRoleCombinedRepository;
 import org.example.security.JwtTokenProvider;
 import org.example.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {

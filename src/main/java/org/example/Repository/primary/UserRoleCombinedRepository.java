@@ -1,12 +1,10 @@
-package org.example.Repository;
+package org.example.Repository.primary;
 
-import org.example.Entity.UserRoleCombined;
+import org.example.Entity.primary.UserRoleCombined;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface UserRoleCombinedRepository extends JpaRepository<UserRoleCombined, Long> {

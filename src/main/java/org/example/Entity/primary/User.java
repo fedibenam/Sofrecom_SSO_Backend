@@ -1,5 +1,5 @@
 // src/main/java/org/example/Entity/User.java
-package org.example.Entity;
+package org.example.Entity.primary;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +17,8 @@ public class User implements UserDetails {
     private Long id;
 
     private String username;
+
+    @Column(name = "full_name") // Map to the correct database column
     private String fullName;
 
     @ElementCollection(fetch = FetchType.EAGER)

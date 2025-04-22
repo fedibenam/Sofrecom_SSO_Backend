@@ -1,5 +1,5 @@
 // UserRoleCombined.java
-package org.example.Entity;
+package org.example.Entity.primary;
 
 import javax.persistence.*;
 
