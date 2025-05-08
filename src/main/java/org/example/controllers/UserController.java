@@ -96,4 +96,54 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
+
+    @PostMapping("/sofsalle")
+    public ResponseEntity<Map<String, String>> sendTokenToSofsallesBackend(@RequestBody UserInfo userInfo) {
+        // Validate and process user information
+        boolean isValid = userService.validateAndProcessUserInfo(userInfo);
+        if (isValid) {
+            // Generate JWT token
+            String jwtToken = userService.generateJwtToken(userInfo);
+            logger.info("Generated JWT token: {}", jwtToken);
+
+            // Prepare request to Sofsalles backend
+            String backendUrl = "http://localhost:8000/api/validate-token";
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer " + jwtToken);
+
+            HttpEntity<String> request = new HttpEntity<>(null, headers);
+
+            try {
+                // Send POST request to backend
+                logger.info("Sending request to Sofsalles backend: {}", backendUrl);
+                ResponseEntity<String> backendResponse = restTemplate.exchange(backendUrl, HttpMethod.POST, request, String.class);
+
+                // Log and return the backend response
+                logger.info("Response from Sofsalles backend: {}", backendResponse.getBody());
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Token sent successfully");
+                response.put("backendResponse", backendResponse.getBody());
+                return ResponseEntity.ok(response);
+            } catch (HttpClientErrorException | HttpServerErrorException e) {
+                // Handle backend errors
+                logger.error("Error from Sofsalles backend: {}", e.getResponseBodyAsString());
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Error from backend: " + e.getMessage());
+                return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
+            } catch (Exception e) {
+                // Handle unexpected errors
+                logger.error("Unexpected error: {}", e.getMessage());
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Failed to communicate with backend: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            }
+        } else {
+            // Handle invalid user information
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Invalid user information");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
 }

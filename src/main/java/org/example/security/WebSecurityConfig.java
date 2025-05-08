@@ -24,12 +24,18 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/auth/info").permitAll()
+                .antMatchers("/api/auth/sofsalle").permitAll()
                 .antMatchers("/api/auth/send-token").permitAll()
                 .antMatchers("/api/users/**").permitAll()
                 .antMatchers("/api/reservations/**").permitAll()
                 .antMatchers("/api/image/**").permitAll()
                 .antMatchers("/api/problems/**").permitAll()
                 .antMatchers("/api/pdfs/**").permitAll()
+                .antMatchers("/api/missions/**").permitAll()
+                .antMatchers("/api/softachat/**").permitAll()
+                .antMatchers("/api/depenses/**").permitAll()
+                .antMatchers("/api/conges").permitAll()
+                .antMatchers("/api/formations/**").permitAll()
                 .anyRequest().authenticated();
         return http.build();
     }
