@@ -107,7 +107,7 @@ public class UserController {
             logger.info("Generated JWT token: {}", jwtToken);
 
             // Prepare request to Sofsalles backend
-            String backendUrl = "http://localhost:8000/api/validate-token";
+            String backendUrl = "http://localhost:8001/api/validate-token";
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);

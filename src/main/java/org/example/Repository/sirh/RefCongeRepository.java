@@ -12,10 +12,10 @@ import java.util.List;
 public interface RefCongeRepository extends JpaRepository<RefConge, String> {
 
     @Query("""
-        SELECT r
-        FROM RefConge r
-        WHERE TRIM(LOWER(r.collaborateur)) LIKE TRIM(LOWER(:collaborateur))
-        ORDER BY r.dateDebut DESC
-    """)
+    SELECT DISTINCT r 
+    FROM RefConge r 
+    WHERE TRIM(LOWER(r.collaborateur)) LIKE TRIM(LOWER(:collaborateur))
+    ORDER BY r.dateDebut DESC   
+""")
     List<RefConge> findByCollaborateur(@Param("collaborateur") String collaborateur);
-}
+    }

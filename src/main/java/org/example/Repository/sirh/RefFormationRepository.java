@@ -21,12 +21,13 @@ public interface RefFormationRepository extends JpaRepository<RefFormation, Stri
 """)
     List<RefFormation> findPlannedSessionsForNextMonth(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query("""
-        SELECT r
-        FROM RefFormation r
-        WHERE r.etatSession = 'Réalisée'
-        ORDER BY r.dateSession DESC
-    """)
+    @Query(value = """
+        SELECT * 
+        FROM ref_formation 
+        WHERE etat_session = 'Réalisée' 
+        ORDER BY date_session DESC 
+        LIMIT 10
+    """, nativeQuery = true)
     List<RefFormation> findCompletedSessions();
 
     @Query("""
